@@ -86,7 +86,7 @@ class IncomeController {
             result.map(el => {
                 msg += `${el.name}  ${(el.status) ? '✅' : '☑️'}\n`
             })
-            msg += `\n\nTTD\n *Achyar Anshorie*`
+            msg += `\n\nCatatan: \n-Ceklis Hijau Sudah Lunas\n-Ceklis Abu-abu Belum Lunas\n\nTTD\n *Achyar Anshorie*`
             const date = `${year}-${month}-01`
             const template = `Uang ${type.toUpperCase()} PB. Embun Periode *${moment(date).format('MMM')} ${year}*\n\n${msg}`
             return res.json(template)
