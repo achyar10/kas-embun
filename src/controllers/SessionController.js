@@ -5,7 +5,7 @@ class SessionController {
     create = (req, res) => {
         const { data } = req.body
         try {
-            model.session.create({ data })
+            model.session.update({ data }, { where: { id: 1 } })
                 .then(response => res.json(response))
                 .catch(err => res.json(err))
         } catch (error) {
@@ -16,7 +16,7 @@ class SessionController {
 
     show = async (req, res) => {
         try {
-            const data = await model.session.findOne({ order: [['id', 'DESC']], raw: true })
+            const data = await model.session.findOne({ where: { id: 1 }, raw: true })
             return res.json(data || {})
         } catch (error) {
             console.log(error)
@@ -26,7 +26,7 @@ class SessionController {
 
     remove = async (req, res) => {
         try {
-            await model.session.destroy({ truncate: true, cascade: false })
+            await model.session.update({ data: null }, { where: { id: 1 } })
             return res.json('OK')
         } catch (error) {
             console.log(error)
