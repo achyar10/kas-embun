@@ -7,10 +7,12 @@ class SpendingController {
     create = async (req, res) => {
         const { date, amount, desc } = req.body
         try {
-            if (!date) return res.status(400).json('tanggal wajib diisi!')
             if (!amount) return res.status(400).json('nominal wajib diisi!')
             if (!desc) return res.status(400).json('desc wajib diisi!')
-            const save = await model.spending.create({ date, amount, desc })
+            const save = await model.spending.create({
+                date: (date) ? date : moment().format('YYYY-MM-DD'),
+                amount, desc
+            })
             Promise.resolve(model.organization.decrement('saldo', { by: amount, where: { id: 1 } }))
             return res.json(save)
         } catch (error) {

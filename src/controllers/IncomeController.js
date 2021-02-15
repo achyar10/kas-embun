@@ -16,7 +16,8 @@ class IncomeController {
                 memberId: member.id,
                 month: (month) ? month : moment().format('MM'),
                 year: (year) ? year : moment().format('YYYY'),
-                type, amount
+                type: (type) ? type : 'kas',
+                amount
             })
             Promise.resolve(model.organization.increment('saldo', { by: amount, where: { id: 1 } }))
             return res.json(save)
@@ -86,7 +87,8 @@ class IncomeController {
                 msg += `${el.name}  ${(el.status) ? '✅' : '☑️'}\n`
             })
             msg += `\n\nTTD\n *Achyar Anshorie*`
-            const template = `Uang ${type.toUpperCase()} PB. Embun Periode *${moment(month).format('MMM')} ${moment(year).format('YYYY')}*\n\n${msg}`
+            const date = `${year}-${month}-01`
+            const template = `Uang ${type.toUpperCase()} PB. Embun Periode *${moment(date).format('MMM')} ${year}*\n\n${msg}`
             return res.json(template)
         } catch (error) {
             console.log(error)
