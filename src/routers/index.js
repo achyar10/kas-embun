@@ -2,6 +2,7 @@ import { Router } from 'express'
 import IncomeController from '../controllers/IncomeController'
 import MemberController from '../controllers/MemberController'
 import OrganizationController from '../controllers/OrganizationController'
+import SessionController from '../controllers/SessionController'
 import SpendingController from '../controllers/SpendingController'
 
 
@@ -31,6 +32,11 @@ class Routers {
 
         // Organization
         this.router.get('/saldo', OrganizationController.saldo)
+
+        // Session
+        this.router.get('/session', SessionController.show)
+        this.router.post('/session', SessionController.create)
+        this.router.delete('/session', SessionController.remove)
         
 
     }
