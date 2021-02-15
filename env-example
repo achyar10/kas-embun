@@ -1,25 +1,10 @@
 NODE_ENV=development
-PORT=3009
+PORT=5000
 SECRET_KEY=$$mujahid212$$
-URL_FCM=https://fcm.googleapis.com/fcm/send
-NOTIF_KEY=key=AAAA44JfS9A:APA91bEIr2N5qTM0KLpC5mRLX3r5_m9xOoVbyYEC9zyj7OI4wl5U3mYEW4gBDvNY0ck9uNb3GxhYemr-CUhvpXhedp2Wx3cBDE0fQDtDbalUA14BC82L8rCV0AhhJhX6hooTewZMUPhQ
-
-USER_EMAIL=noreply@matik.id
 
 DB_HOST=localhost
 DB_PORT=3306
 DB_USER=root
 DB_PWD=root
-DB_NAME=starterapp
+DB_NAME=embun
 DB_TYPE=mysql
-
-CLOUD_NAME=matik
-CLOUD_KEY=845421198782578
-CLOUD_SECRET=BVcRkJ1wKnS2ltR_gfcQi56w6gA
-API_SENDGRID=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
-
-API_DUITKU=https://passport.duitku.com
-MERCHANT_CODE=D2526
-MERCHANT_KEY=25d701636fff1fcb5b4259b0d20abbf9
-CALLBACK_URL=http://localhost:3005/callback/paid,
-RETURN_URL=http://localhost:3005/success
