@@ -5,7 +5,12 @@ class MemberController {
     list = async (req, res) => {
         try {
             const data = await model.member.findAll({ raw: true })
-            return res.json(data)
+            let members = ''
+            data.map((el, i) => {
+                members += `${i+1}. ${el.name} - ${el.position}\n`
+            })
+            const template = `*List Anggota PB. Embun*\n${members}`
+            return res.json(template)
         } catch (error) {
             console.log(error)
             return res.status(500).json('Error koneksi')

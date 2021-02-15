@@ -41,7 +41,15 @@ class IncomeController {
                 include: [{ model: model.member, attributes: ['name'] }],
                 raw: true, nest: true
             })
-            return res.json(data)
+            let msg = '', total = 0
+            data.map(el => {
+                total += el.amount
+                msg += `${moment(el.date).format('DD-MMM-YY')}  ${this.numberFormat(el.amount)}     ${el.type}\n`
+            })
+            msg += `\nTotal Pemasukan *Rp. ${this.numberFormat(total)}*`
+            msg += `\n\nTTD\n *Achyar Anshorie*`
+            const template = `*Pemasukan PB. Embun*\n\nTgl               Nominal   Ket\n${msg}`
+            return res.json(template)
         } catch (error) {
             console.log(error)
             return res.status(500).json('Error koneksi')
@@ -49,24 +57,23 @@ class IncomeController {
     }
 
     kas = async (req, res) => {
-        const { month, year, type } = req.body
+        let { month, year, type } = req.query
         try {
+            type = (type) ? type : 'kas'
+            month = (month) ? month : moment().format('MM')
+            year = (year) ? year : moment().format('YYYY')
             const members = await model.member.findAll({ attributes: ['id', 'name'], order: [['name', 'ASC']], raw: true })
             const kas = await model.income.findAll({
-                where: {
-                    type: (type) ? type : 'kas',
-                    month: (month) ? month : moment().format('MM'),
-                    year: (year) ? year : moment().format('YYYY'),
-                },
+                where: { type, month, year },
                 raw: true
             })
             let result = []
             for (const member of members) {
-                let amount = 0, status = 'Belum Lunas'
+                let amount = 0, status = false
                 for (const trans of kas) {
                     if (member.id == trans.memberId) {
                         amount = trans.amount
-                        status = 'Lunas'
+                        status = true
                     }
                 }
                 result.push({
@@ -74,11 +81,21 @@ class IncomeController {
                     amount, status
                 })
             }
-            return res.json(result)
+            let msg = ''
+            result.map(el => {
+                msg += `${el.name}  ${(el.status) ? '✅' : '☑️'}\n`
+            })
+            msg += `\n\nTTD\n *Achyar Anshorie*`
+            const template = `Uang ${type.toUpperCase()} PB. Embun Periode *${moment(month).format('MMM')} ${moment(year).format('YYYY')}*\n\n${msg}`
+            return res.json(template)
         } catch (error) {
             console.log(error)
             return res.status(500).json('Error koneksi')
         }
+    }
+
+    numberFormat = (x) => {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
     }
 
 }

@@ -31,13 +31,26 @@ class SpendingController {
                 where: {
                     date: { [Op.between]: [gte, lte] }
                 },
+                order: [['date', 'ASC']],
                 raw: true
             })
-            return res.json(data)
+            let msg = '', total = 0
+            data.map(el => {
+                total += el.amount
+                msg += `${moment(el.date).format('DD-MMM-YY')}  ${this.numberFormat(el.amount)}     ${el.desc}\n`
+            })
+            msg += `\nTotal Pengeluaran *Rp. ${this.numberFormat(total)}*`
+            msg += `\n\nTTD\n *Achyar Anshorie*`
+            const template = `*Pengeluaran PB. Embun*\n\nTgl               Nominal   Ket\n${msg}`
+            return res.json(template)
         } catch (error) {
             console.log(error)
             return res.status(500).json('Error koneksi')
         }
+    }
+
+    numberFormat = (x) => {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
     }
 
 }
