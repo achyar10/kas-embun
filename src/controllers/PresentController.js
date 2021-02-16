@@ -7,7 +7,7 @@ class PresentController {
         try {
             const { name } = req.body
             const check = await model.member.findOne({ where: { name }, raw: true })
-            if (!check) return res.status(404).json('nama tidak ditemukan')
+            if (!check) return res.json('nama tidak ditemukan')
             const present = await model.present.findOne({ where: { memberId: check.id, date: moment().format('YYYY-MM-DD') }, raw: true })
             if (present) return res.json('kan lu udah absen tadi, hmm..')
             await model.present.create({ memberId: check.id, date: moment().format('YYYY-MM-DD') })
