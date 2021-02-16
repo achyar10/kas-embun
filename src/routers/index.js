@@ -2,6 +2,7 @@ import { Router } from 'express'
 import IncomeController from '../controllers/IncomeController'
 import MemberController from '../controllers/MemberController'
 import OrganizationController from '../controllers/OrganizationController'
+import PresentController from '../controllers/PresentController'
 import RelationController from '../controllers/RelationController'
 import SessionController from '../controllers/SessionController'
 import SpendingController from '../controllers/SpendingController'
@@ -42,6 +43,10 @@ class Routers {
         // Relation
         this.router.get('/relation', RelationController.show)
         this.router.post('/relation', RelationController.create)
+
+        // Present
+        this.router.get('/present', PresentController.show)
+        this.router.post('/present', PresentController.create)
         
 
     }
