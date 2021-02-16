@@ -46,10 +46,10 @@ class MemberController {
     }
 
     remove = async (req, res) => {
-        const { id } = req.body
+        const { name } = req.body
         try {
-            if (!id) return res.status(400).json('id wajib diisi!')
-            const remove = await model.member.destroy({ where: { id } })
+            if (!name) return res.status(400).json('id wajib diisi!')
+            const remove = await model.member.destroy({ where: { name } })
             if (remove) {
                 return res.json('Data berhasil dihapus')
             }
