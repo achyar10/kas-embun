@@ -7,7 +7,7 @@ class MemberController {
             const data = await model.member.findAll({ raw: true })
             let members = ''
             data.map((el, i) => {
-                members += `${i+1}. ${el.name} - ${el.position}\n`
+                members += `${i + 1}. ${el.name} - ${el.position}\n`
             })
             const template = `*List Anggota PB. Embun*\n${members}`
             return res.json(template)

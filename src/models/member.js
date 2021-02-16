@@ -10,6 +10,11 @@ export default (sequelize, DataTypes) => {
             foreignKey: 'memberId',
             onDelete: 'CASCADE'
         })
+        member.hasMany(models.present, {
+            as: 'presents',
+            foreignKey: 'memberId',
+            onDelete: 'CASCADE'
+        })
     }
     sequelizePaginate.paginate(member)
     return member;
