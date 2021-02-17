@@ -45,7 +45,7 @@ class IncomeController {
             let msg = '', total = 0
             data.map(el => {
                 total += el.amount
-                msg += `${moment(el.date).format('DD-MMM-YY')}  ${this.numberFormat(el.amount)}     ${el.type}\n`
+                msg += `${moment(el.createdAt).format('DD-MMM-YY')}  ${this.numberFormat(el.amount)}     ${el.type}\n`
             })
             msg += `\nTotal Pemasukan *Rp. ${this.numberFormat(total)}*`
             msg += `\n\nTTD\n *Achyar Anshorie*`
