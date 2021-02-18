@@ -48,6 +48,7 @@ class Routers {
         this.router.get('/present', PresentController.show)
         this.router.post('/present', PresentController.create)
         
+        this.router.get('/mutasi', IncomeController.mutasi)
 
     }
 

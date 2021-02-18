@@ -96,6 +96,56 @@ class IncomeController {
         }
     }
 
+    mutasi = async (req, res) => {
+        const { startDate, endDate } = req.query
+        try {
+            let gte = startDate, lte = endDate
+            if (!startDate && !endDate) {
+                gte = moment().format('YYYY-MM-01')
+                lte = moment().format('YYYY-MM-DD')
+            }
+            const income = await model.income.findAll({
+                where: {
+                    createdAt: { [Op.between]: [moment(gte).startOf('day'), moment(lte).endOf('day')] }
+                },
+                attributes: [['type', 'desc'], 'amount', [model.Sequelize.fn('DATE', model.Sequelize.col('createdAt')), 'date']],
+                raw: true
+            })
+            const spending = await model.spending.findAll({
+                where: {
+                    date: { [Op.between]: [gte, lte] }
+                },
+                attributes: ['desc', 'amount', 'date'],
+                raw: true
+            })
+            const saldo = await model.organization.sum('saldo') || 0
+            const merge = [...income, ...spending]
+            const sort = merge.sort((a, b) => new Date(a.date) - new Date(b.date))
+            let msg = '', debit = 0, kredit = 0
+            sort.map(el => {
+                let amount
+                if (el.desc == 'kas' || el.desc == 'sparing' || el.desc == 'lainnya') {
+                    debit += el.amount
+                    amount = '*(+)* ' + this.numberFormat(el.amount)
+                } else {
+                    kredit += el.amount
+                    amount = '*(-)* ' + this.numberFormat(el.amount)
+                }
+                msg += `${moment(el.date).format('DD-MMM-YY')}  ${amount}     ${el.desc}\n`
+            })
+            msg += `\nTotal Pemasukan Rp. ${this.numberFormat(debit)}`
+            msg += `\nTotal Pengeluaran Rp. ${this.numberFormat(kredit)}`
+            msg += `\nTotal Keseluruhan *Rp. ${this.numberFormat(debit - kredit)}*`
+            msg += `\n\nSaldo Saat ini *Rp. ${this.numberFormat(saldo)}*`
+            msg += `\n\nTTD\n *Achyar Anshorie*`
+            const template = `*Mutasi KAS PB. Embun*\n\nTgl               Nominal   Ket\n${msg}`
+            return res.json(template)
+        } catch (error) {
+            console.log(error)
+            return res.status(500).json('Error koneksi')
+        }
+    }
+
     numberFormat = (x) => {
         return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
     }
